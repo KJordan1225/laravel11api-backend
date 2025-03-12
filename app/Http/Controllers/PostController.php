@@ -24,7 +24,7 @@ class PostController extends Controller implements HasMiddleware
      */
     public function index()
     {
-        return Post::with('user' )->latest()->get ();
+        return Post::with('user' )->latest()->get();
     }
 
     /**
@@ -39,7 +39,11 @@ class PostController extends Controller implements HasMiddleware
 
         $post = $request->user()->posts()->create($fields);
 
-        return ['post' => $post, 'user' => $post->user];
+        return response()->json([
+            'success' => true,
+            'message' => 'Post created successfully',
+            'user' => $post->user
+        ], 201);
     }
 
     /**
@@ -47,8 +51,9 @@ class PostController extends Controller implements HasMiddleware
      */
     public function show(Post $post)
     {
-        return ['post' => $post, 'user' => $post->user];
+        return ['success' => true, 'post' => $post, 'user' => $post->user];
     }
+    
 
     /**
      * Update the specified resource in storage.
@@ -69,7 +74,11 @@ class PostController extends Controller implements HasMiddleware
 
         $post->update($fields);
 
-        return ['post' => $post];
+        return response()->json([
+            'success' => true,
+            'message' => 'Post updated successfully',
+            'post' => $post
+        ], 201);
     }
 
     /**
@@ -85,6 +94,10 @@ class PostController extends Controller implements HasMiddleware
         
         $post->delete();
 
-        return ['message' => 'The post was deleted'];
+        return response()->json([
+            'success' => true,
+            'message' => 'Post deleted successfully',
+        ]);
     }
+    
 }
